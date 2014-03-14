@@ -1,0 +1,16 @@
+﻿<Window x:Class="GenericObjectVisualizer.TestUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:genericObjectVisualizer="clr-namespace:GenericObjectVisualizer;assembly=GenericObjectVisualizer"
+        Title="MainWindow" Height="350" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <genericObjectVisualizer:GovText Name="GovXml" Format="Xml" Content="{Binding TestObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="1"/>
+        <genericObjectVisualizer:GovText Name="GovJson" Format="Json" Content="{Binding TestObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="0"/>
+        <genericObjectVisualizer:GovKeyValue Name="GovKeyValue" Content="{Binding TestObject, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Column="2"/>
+    </Grid>
+</Window>
