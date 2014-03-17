@@ -28,7 +28,7 @@ namespace GenericObjectVisualizer
             foreach (var property in properties)
             {
                 var path = property.Path;
-                if (path == null)
+                if (path == null)//Root
                 {
                     if (property.Name.EndsWith("]"))
                     {
@@ -58,9 +58,41 @@ namespace GenericObjectVisualizer
                 }
                 else
                 {
-                    var firstBackSlash = path.IndexOf("\\");
-                    var propname = path.Substring(0, path.Length - (path.Length - firstBackSlash));
-                    subOjects.Add(propname);
+                    if (path.EndsWith("]")) //Enumeration
+                    {
+                        var split = path.Split('[', ']', '\\');
+                        var index = Convert.ToInt32(split[split.Length - 2]);
+                        var propName = split[split.Length - 3];
+
+
+                        var propInfo = targetType.GetProperty(propName);
+                        var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
+                        var indexer = propInfo.PropertyType.GetProperty("Item");
+                        var targetEnumerationItem = targetEnumeration.ElementAt(index);
+                        if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name))//In der Enumeration steckt ein Basistyp
+                        {
+                            var targetValue = GetTargetValue(property.Value, targetEnumerationItem.GetType());
+                            indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                        }
+                        else//In der Enumeration steckt kein Basistyp
+                        {
+                            var inputProperty = new PropertyVisualizerInformations(property.Name, property.Value);
+                            var targetValue = ConvertToObject(
+                                new List<PropertyVisualizerInformations> { inputProperty },
+                                targetEnumerationItem);
+                            indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                        }
+                    }
+                    else if (path.EndsWith("\\")) //Komplexes Objekt
+                    {
+                        var firstBackSlash = path.IndexOf("\\");
+                        var propname = path.Substring(0, path.Length - (path.Length - firstBackSlash));
+                        subOjects.Add(propname);
+                    }
+                    else
+                    {
+                        throw new Exception("strange input!!!");
+                    }
                 }
             }
             foreach (var subOject in subOjects)
@@ -110,7 +142,7 @@ namespace GenericObjectVisualizer
                         }
                         else if (typeof(IEnumerable).IsAssignableFrom(propertyInfo.PropertyType)) //IEnumerable
                         {
-                            retVal.AddRange(HandleEnumerations(content, propertyInfo));
+                            retVal.AddRange(HandleEnumerations(propertyInfo.GetValue(content, null) as IEnumerable<object>, propertyInfo.Name));
                         }
                         else //Komplexe Object
                         {
@@ -128,28 +160,29 @@ namespace GenericObjectVisualizer
             return retVal;
         }
 
-        private IEnumerable<PropertyVisualizerInformations> HandleEnumerations(object content, PropertyInfo propertyInfo)
+        private IEnumerable<PropertyVisualizerInformations> HandleEnumerations(IEnumerable<object> enumerable, string propertyName)
         {
             var retVal = new List<PropertyVisualizerInformations>();
-            var enumerable = propertyInfo.GetValue(content, null) as IEnumerable<object>;
             if (enumerable != null)
             {
                 int i = 0;
                 foreach (var o in enumerable)
                 {
-                    var enumeration = ConvertFromObject(o);
-                    foreach (var propertyVisualizerInformationse in enumeration)
+                    var name = propertyName + "[" + i++ + "]";
+                    if (_supportedTypes.Values.Contains(o.GetType().Name))//Standardtype
                     {
-                        var name = propertyInfo.Name + "[" + i++ + "]";
-                        if (propertyVisualizerInformationse.Name != null)
+                        retVal.Add(new PropertyVisualizerInformations(name, GetStringValue(o)));
+                    }
+                    else//Komplexes Objekt
+                    {
+                        var enumeration = ConvertFromObject(o);
+                        foreach (var propertyVisualizerInformationse in enumeration)
                         {
-                            name += propertyVisualizerInformationse.Name;
+                            retVal.Add(
+                                new PropertyVisualizerInformations(
+                                    propertyVisualizerInformationse.Name,
+                                    propertyVisualizerInformationse.Value, name));
                         }
-
-                        retVal.Add(
-                            new PropertyVisualizerInformations(
-                                name,
-                                propertyVisualizerInformationse.Value));
                     }
                 }
             }
@@ -186,14 +219,14 @@ namespace GenericObjectVisualizer
 
         private static PropertyVisualizerInformations HandleSupportedBaseType(object content, PropertyInfo propertyInfo, string name)
         {
-            string value = GetStringValue(propertyInfo.PropertyType, propertyInfo.GetValue(content, null));
+            string value = GetStringValue(propertyInfo.GetValue(content, null));
             return new PropertyVisualizerInformations(name, value);
         }
 
-        private static string GetStringValue(Type sourceType, object sourceContent)
+        private static string GetStringValue(object sourceContent)
         {
             string value;
-            switch (sourceType.Name)
+            switch (sourceContent.GetType().Name)
             {
                 case "TimeSpan":
                     value = ((TimeSpan)sourceContent).TotalMilliseconds.ToString();
