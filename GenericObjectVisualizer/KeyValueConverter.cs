@@ -58,17 +58,16 @@ namespace GenericObjectVisualizer
                 }
                 else
                 {
-                    if (path.EndsWith("]")) //Enumeration
+                    if (path.EndsWith("]") && !path.Contains("\\")) //Enumeration
                     {
                         var split = path.Split('[', ']', '\\');
                         var index = Convert.ToInt32(split[split.Length - 2]);
                         var propName = split[split.Length - 3];
-
-
                         var propInfo = targetType.GetProperty(propName);
                         var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
                         var indexer = propInfo.PropertyType.GetProperty("Item");
                         var targetEnumerationItem = targetEnumeration.ElementAt(index);
+
                         if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name))//In der Enumeration steckt ein Basistyp
                         {
                             var targetValue = GetTargetValue(property.Value, targetEnumerationItem.GetType());
@@ -83,11 +82,10 @@ namespace GenericObjectVisualizer
                             indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
                         }
                     }
-                    else if (path.EndsWith("\\")) //Komplexes Objekt
+                    else if (path.Contains("\\")) //Komplexes Objekt
                     {
-                        var firstBackSlash = path.IndexOf("\\");
-                        var propname = path.Substring(0, path.Length - (path.Length - firstBackSlash));
-                        subOjects.Add(propname);
+                        var split = path.Split('\\');
+                        subOjects.Add(split[0]);
                     }
                     else
                     {

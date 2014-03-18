@@ -60,6 +60,7 @@
     <Compile Include="TestObject1.cs" />
     <Compile Include="TestObject2.cs" />
     <Compile Include="TestObject3.cs" />
+    <Compile Include="TestObject4.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

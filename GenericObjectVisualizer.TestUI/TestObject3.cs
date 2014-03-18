@@ -19,6 +19,6 @@ namespace GenericObjectVisualizer.TestUI
 
         public string Hans { get; set; }
         public string Klaus { get; set; }
-        public List<string> LiLaListe { get; set; } 
+        public List<string> LiLaListe { get; set; }
     }
 }

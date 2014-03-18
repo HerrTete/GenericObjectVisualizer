@@ -180,6 +180,25 @@ namespace GenericObjectVisualizer.Test
             Assert.AreEqual("Ober", result[2].Value);
             Assert.AreEqual("Alles in Bester Ordnung", result[3].Value);
             Assert.AreEqual("...oder auch nicht.", result[4].Value);
+
+            //Änderungen machen
+            foreach (var propertyVisualizerInformationse in result)
+            {
+                propertyVisualizerInformationse.Value += "TEST";
+            }
+            var reconvertedTestObject = converter.ConvertToObject(result, testObject) as EnumTest4;
+
+            Assert.IsNotNull(reconvertedTestObject);
+            foreach (var eintrag in reconvertedTestObject.Klassenbuch.Einträge)
+            {
+                Assert.IsTrue(eintrag.EndsWith("TEST"));
+                Assert.IsTrue(eintrag.EndsWith("TEST"));
+            }
+
+            Assert.IsTrue(reconvertedTestObject.Klassenbuch.Klassenname.EndsWith("TEST"));
+
+            Assert.IsTrue(reconvertedTestObject.Klassenbuch.Klassensprecher.Name.EndsWith("TEST"));
+            Assert.IsTrue(reconvertedTestObject.Klassenbuch.Klassensprecher.Vorname.EndsWith("TEST"));
         }
     }
 
