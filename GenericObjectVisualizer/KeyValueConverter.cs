@@ -32,22 +32,7 @@ namespace GenericObjectVisualizer
                 {
                     if (property.Name.EndsWith("]"))
                     {
-                        var split = property.Name.Split('[', ']');
-                        var index = Convert.ToInt32(split[1]);
-                        var propName = split[0];
-                        var propInfo = targetType.GetProperty(propName);
-                        var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
-                        var indexer = propInfo.PropertyType.GetProperty("Item");
-                        var targetEnumerationItem = targetEnumeration.ElementAt(index);
-                        if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name))//In der Enumeration steckt ein Basistyp
-                        {
-                            var targetValue = GetTargetValue(property.Value, targetEnumerationItem.GetType());
-                            indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
-                        }
-                        else//In der Enumeration steckt kein Basistyp
-                        {
-
-                        }
+                        targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value);
                     }
                     else
                     {
@@ -60,27 +45,7 @@ namespace GenericObjectVisualizer
                 {
                     if (path.EndsWith("]") && !path.Contains("\\")) //Enumeration
                     {
-                        var split = path.Split('[', ']', '\\');
-                        var index = Convert.ToInt32(split[split.Length - 2]);
-                        var propName = split[split.Length - 3];
-                        var propInfo = targetType.GetProperty(propName);
-                        var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
-                        var indexer = propInfo.PropertyType.GetProperty("Item");
-                        var targetEnumerationItem = targetEnumeration.ElementAt(index);
-
-                        if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name))//In der Enumeration steckt ein Basistyp
-                        {
-                            var targetValue = GetTargetValue(property.Value, targetEnumerationItem.GetType());
-                            indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
-                        }
-                        else//In der Enumeration steckt kein Basistyp
-                        {
-                            var inputProperty = new PropertyVisualizerInformations(property.Name, property.Value);
-                            var targetValue = ConvertToObject(
-                                new List<PropertyVisualizerInformations> { inputProperty },
-                                targetEnumerationItem);
-                            indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
-                        }
+                        targetObject = SetValueOnEnumeration(targetObject, property.Path, property.Name, property.Value);
                     }
                     else if (path.Contains("\\")) //Komplexes Objekt
                     {
@@ -114,6 +79,49 @@ namespace GenericObjectVisualizer
                 var targetSubObject = propInfo.GetValue(targetObject, null);
                 targetSubObject = ConvertToObject(newSubObjectProperties, targetSubObject);
                 propInfo.SetValue(targetObject, targetSubObject, null);
+            }
+            return targetObject;
+        }
+
+        private object SetValueOnEnumeration(object targetObject, string propertyName, string propertyValue)
+        {
+            var split = propertyName.Split('[', ']');
+            var index = Convert.ToInt32(split[1]);
+            var propName = split[0];
+            var propInfo = targetObject.GetType().GetProperty(propName);
+            var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
+            var indexer = propInfo.PropertyType.GetProperty("Item");
+            var targetEnumerationItem = targetEnumeration.ElementAt(index);
+            if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name)) //In der Enumeration steckt ein Basistyp
+            {
+                var targetValue = GetTargetValue(propertyValue, targetEnumerationItem.GetType());
+                indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+            }
+            return targetObject;
+        }
+
+        private object SetValueOnEnumeration(object targetObject, string propertyPath, string propertyName, string propertyValue)
+        {
+            var split = propertyPath.Split('[', ']', '\\');
+            var index = Convert.ToInt32(split[split.Length - 2]);
+            var propName = split[split.Length - 3];
+            var propInfo = targetObject.GetType().GetProperty(propName);
+            var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
+            var indexer = propInfo.PropertyType.GetProperty("Item");
+            var targetEnumerationItem = targetEnumeration.ElementAt(index);
+
+            if (_supportedTypes.Values.Contains(targetEnumerationItem.GetType().Name)) //In der Enumeration steckt ein Basistyp
+            {
+                var targetValue = GetTargetValue(propertyValue, targetEnumerationItem.GetType());
+                indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+            }
+            else //In der Enumeration steckt kein Basistyp
+            {
+                var inputProperty = new PropertyVisualizerInformations(propertyName, propertyValue);
+                var targetValue = ConvertToObject(
+                    new List<PropertyVisualizerInformations> { inputProperty },
+                    targetEnumerationItem);
+                indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
             }
             return targetObject;
         }
