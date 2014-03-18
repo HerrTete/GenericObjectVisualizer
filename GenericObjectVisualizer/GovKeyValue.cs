@@ -54,7 +54,7 @@ namespace GenericObjectVisualizer
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            var newTargetObject = _converter.ConvertToObject(_keyValue, Content);
+            var newTargetObject = KeyValueConverter.ConvertToObject(_keyValue, Content);
             if (newTargetObject != null)
             {
                 Content = null;
@@ -66,7 +66,7 @@ namespace GenericObjectVisualizer
         {
             if (_targetListView != null)
             {
-                _keyValue = _converter.ConvertFromObject(Content);
+                _keyValue = KeyValueConverter.ConvertFromObject(Content);
                 _targetListView.ItemsSource = _keyValue;
             }
         }

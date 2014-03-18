@@ -12,28 +12,25 @@ namespace GenericObjectVisualizer.Test
         [TestMethod]
         public void ConvertFromObjectTest()
         {
-            var converter = new KeyValueConverter();
             var testObject = new TestObject1();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             Assert.IsTrue(result.Count >= 25);
         }
 
         [TestMethod]
         public void ConvertToObjectTest()
         {
-            var converter = new KeyValueConverter();
             var testObject = new TestObject1();
-            var result = converter.ConvertFromObject(testObject);
-            object newTestObject = converter.ConvertToObject(result, testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+            object newTestObject = KeyValueConverter.ConvertToObject(result, testObject);
             Assert.AreEqual(testObject, newTestObject);
         }
 
         [TestMethod]
         public void ConvertBackWithChangesObjectTest()
         {
-            var converter = new KeyValueConverter();
             var testObject = new TestObject1();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             foreach (var propertyVisualizerInformationse in result)
             {
                 if (propertyVisualizerInformationse.Value == "Hans")
@@ -41,7 +38,7 @@ namespace GenericObjectVisualizer.Test
                     propertyVisualizerInformationse.Value = "Hanz";
                 }
             }
-            object newTestObject = converter.ConvertToObject(result, testObject);
+            object newTestObject = KeyValueConverter.ConvertToObject(result, testObject);
             Assert.AreEqual(testObject, newTestObject);
             Assert.AreEqual("Hanz", (newTestObject as TestObject1).Liste[0]);
         }
@@ -49,9 +46,8 @@ namespace GenericObjectVisualizer.Test
         [TestMethod]
         public void ConvertFromObjectEnumerationTest1()
         {
-            var converter = new KeyValueConverter();
             var testObject = new EnumTest1();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             Assert.IsTrue(result.Count == 4);
             Assert.AreEqual("StringListe[0]", result[0].Name);
             Assert.AreEqual("StringListe[1]", result[1].Name);
@@ -67,7 +63,7 @@ namespace GenericObjectVisualizer.Test
             {
                 propertyVisualizerInformationse.Value += "TEST";
             }
-            var reconvertedTestObject = converter.ConvertToObject(result, testObject) as EnumTest1;
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTest1;
 
             Assert.IsNotNull(reconvertedTestObject);
             foreach (var stringEintrag in reconvertedTestObject.StringListe)
@@ -79,9 +75,8 @@ namespace GenericObjectVisualizer.Test
         [TestMethod]
         public void ConvertFromObjectEnumerationTest2()
         {
-            var converter = new KeyValueConverter();
             var testObject = new EnumTest2();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             Assert.IsTrue(result.Count == 6);
             Assert.AreEqual("Name", result[0].Name);
             Assert.AreEqual("Vorname", result[1].Name);
@@ -109,7 +104,7 @@ namespace GenericObjectVisualizer.Test
             {
                 propertyVisualizerInformationse.Value += "TEST";
             }
-            var reconvertedTestObject = converter.ConvertToObject(result, testObject) as EnumTest2;
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTest2;
 
             Assert.IsNotNull(reconvertedTestObject);
             foreach (var person in reconvertedTestObject.ObjectListe)
@@ -122,9 +117,8 @@ namespace GenericObjectVisualizer.Test
         [TestMethod]
         public void ConvertFromObjectEnumerationTest3()
         {
-            var converter = new KeyValueConverter();
             var testObject = new EnumTest3();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             Assert.IsTrue(result.Count == 4);
             Assert.AreEqual("Name", result[0].Name);
             Assert.AreEqual("Vorname", result[1].Name);
@@ -146,7 +140,7 @@ namespace GenericObjectVisualizer.Test
             {
                 propertyVisualizerInformationse.Value += "TEST";
             }
-            var reconvertedTestObject = converter.ConvertToObject(result, testObject) as EnumTest3;
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTest3;
 
             Assert.IsNotNull(reconvertedTestObject);
             foreach (var person in reconvertedTestObject.Gruppe.Personen)
@@ -159,9 +153,8 @@ namespace GenericObjectVisualizer.Test
         [TestMethod]
         public void ConvertFromObjectEnumerationTest4()
         {
-            var converter = new KeyValueConverter();
             var testObject = new EnumTest4();
-            var result = converter.ConvertFromObject(testObject);
+            var result = KeyValueConverter.ConvertFromObject(testObject);
             Assert.IsTrue(result.Count == 5);
             Assert.AreEqual("Klassenname", result[0].Name);
             Assert.AreEqual("Name", result[1].Name);
@@ -186,7 +179,7 @@ namespace GenericObjectVisualizer.Test
             {
                 propertyVisualizerInformationse.Value += "TEST";
             }
-            var reconvertedTestObject = converter.ConvertToObject(result, testObject) as EnumTest4;
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTest4;
 
             Assert.IsNotNull(reconvertedTestObject);
             foreach (var eintrag in reconvertedTestObject.Klassenbuch.Einträge)
@@ -206,15 +199,14 @@ namespace GenericObjectVisualizer.Test
         {
             var inputString = "Das ist ein Test";
             var newString = "Das war ein Test.";
-            var converter = new KeyValueConverter();
-            var result = converter.ConvertFromObject(inputString);
+            var result = KeyValueConverter.ConvertFromObject(inputString);
             Assert.IsTrue(result.Count == 1);
             Assert.AreEqual(inputString, result[0].Value);
             
             //Änderung machen
             result[0].Value = newString;
 
-            var reconvertedString = converter.ConvertToObject(result, inputString);
+            var reconvertedString = KeyValueConverter.ConvertToObject(result, inputString);
             Assert.AreEqual(newString, reconvertedString);
         }
     }

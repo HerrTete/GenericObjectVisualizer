@@ -8,18 +8,14 @@ namespace GenericObjectVisualizer
 {
     internal class KeyValueConverter
     {
-        public object ConvertToObject(List<PropertyVisualizerInformations> properties, object targetObject)
+        public static object ConvertToObject(List<PropertyVisualizerInformations> properties, object targetObject)
         {
-            if (StandardTypeConverter.IsStandardType(targetObject.GetType()))
-            {
-                targetObject = StandardTypeConverter.ConvertFromString(properties[0].Value, targetObject.GetType());
-            }
-            else
+            if (!StandardTypeConverter.IsStandardType(targetObject))
             {
                 var subOjects = new HashSet<string>();
                 foreach (var property in properties)
                 {
-                    if (property.Path == null)//Root
+                    if (property.Path == null) //Root
                     {
                         if (property.Name.EndsWith("]"))
                         {
@@ -34,7 +30,11 @@ namespace GenericObjectVisualizer
                     {
                         if (property.Path.EndsWith("]") && !property.Path.Contains("\\")) //Enumeration
                         {
-                            targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value, property.Path);
+                            targetObject = SetValueOnEnumeration(
+                                targetObject,
+                                property.Name,
+                                property.Value,
+                                property.Path);
                         }
                         else if (property.Path.Contains("\\")) //Komplexes Objekt
                         {
@@ -51,10 +51,14 @@ namespace GenericObjectVisualizer
                     targetObject = SetSubObject(properties, targetObject, subOject);
                 }
             }
+            else
+            {
+                targetObject = StandardTypeConverter.ConvertFromString(properties[0].Value, targetObject.GetType());
+            }
             return targetObject;
         }
 
-        public List<PropertyVisualizerInformations> ConvertFromObject(object content)
+        public static List<PropertyVisualizerInformations> ConvertFromObject(object content)
         {
             var retVal = new List<PropertyVisualizerInformations>();
             if (content != null)
@@ -96,7 +100,7 @@ namespace GenericObjectVisualizer
             return retVal;
         }
 
-        private object SetSubObject(IEnumerable<PropertyVisualizerInformations> properties, object targetObject, string subOject)
+        private static object SetSubObject(IEnumerable<PropertyVisualizerInformations> properties, object targetObject, string subOject)
         {
             var subObjectProperties = properties.Where(p => p.Path != null && p.Path.StartsWith(subOject + "\\")).ToList();
             var newSubObjectProperties = new List<PropertyVisualizerInformations>();
@@ -120,7 +124,7 @@ namespace GenericObjectVisualizer
             return targetObject;
         }
 
-        private object SetValueOnStandardTypeProperty(object targetObject, string propertyName, string propertyValue)
+        private static object SetValueOnStandardTypeProperty(object targetObject, string propertyName, string propertyValue)
         {
             var propInfo = targetObject.GetType().GetProperty(propertyName);
             var targetValue = StandardTypeConverter.ConvertFromString(propertyValue, propInfo.PropertyType);
@@ -128,7 +132,7 @@ namespace GenericObjectVisualizer
             return targetObject;
         }
 
-        private object SetValueOnEnumeration(object targetObject, string propertyName, string propertyValue, string propertyPath = null)
+        private static object SetValueOnEnumeration(object targetObject, string propertyName, string propertyValue, string propertyPath = null)
         {
             var splitter = propertyName;
             if (propertyPath != null)
@@ -159,7 +163,7 @@ namespace GenericObjectVisualizer
             return targetObject;
         }
 
-        private IEnumerable<PropertyVisualizerInformations> ConvertEnumeration(IEnumerable<object> enumerable, string propertyName)
+        private static IEnumerable<PropertyVisualizerInformations> ConvertEnumeration(IEnumerable<object> enumerable, string propertyName)
         {
             var retVal = new List<PropertyVisualizerInformations>();
             if (enumerable != null)
