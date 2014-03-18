@@ -57,6 +57,7 @@
     <Compile Include="JsonConverter.cs" />
     <Compile Include="KeyValueConverter.cs" />
     <Compile Include="PropertyVisualizerInformations.cs" />
+    <Compile Include="StandardTypeConverter.cs" />
     <Compile Include="XmlConverter.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>

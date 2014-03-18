@@ -18,13 +18,6 @@
             Value = value;
         }
 
-        public PropertyVisualizerInformations(PropertyVisualizerInformations propertyVisualizerInformationse, int iteration)
-        {
-            Name = propertyVisualizerInformationse.Name;
-            Value = propertyVisualizerInformationse.Value;
-            Path = string.Concat(propertyVisualizerInformationse, "[", iteration, "]");
-        }
-
         public string Name { get; private set; }
         public string Path { get; private set; }
         public string Value { get; set; }
