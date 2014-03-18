@@ -10,40 +10,46 @@ namespace GenericObjectVisualizer
     {
         public object ConvertToObject(List<PropertyVisualizerInformations> properties, object targetObject)
         {
-            var subOjects = new HashSet<string>();
-
-            foreach (var property in properties)
+            if (StandardTypeConverter.IsStandardType(targetObject.GetType()))
             {
-                if (property.Path == null)//Root
-                {
-                    if (property.Name.EndsWith("]"))
-                    {
-                        targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value);
-                    }
-                    else
-                    {
-                        targetObject = SetValueOnStandardTypeProperty(targetObject, property.Name, property.Value);
-                    }
-                }
-                else
-                {
-                    if (property.Path.EndsWith("]") && !property.Path.Contains("\\")) //Enumeration
-                    {
-                        targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value, property.Path);
-                    }
-                    else if (property.Path.Contains("\\")) //Komplexes Objekt
-                    {
-                        subOjects.Add(property.Path.Split('\\')[0]);
-                    }
-                    else
-                    {
-                        throw new Exception("strange input!!!");
-                    }
-                }
+                targetObject = StandardTypeConverter.ConvertFromString(properties[0].Value, targetObject.GetType());
             }
-            foreach (var subOject in subOjects)
+            else
             {
-                targetObject = SetSubObject(properties, targetObject, subOject);
+                var subOjects = new HashSet<string>();
+                foreach (var property in properties)
+                {
+                    if (property.Path == null)//Root
+                    {
+                        if (property.Name.EndsWith("]"))
+                        {
+                            targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value);
+                        }
+                        else
+                        {
+                            targetObject = SetValueOnStandardTypeProperty(targetObject, property.Name, property.Value);
+                        }
+                    }
+                    else
+                    {
+                        if (property.Path.EndsWith("]") && !property.Path.Contains("\\")) //Enumeration
+                        {
+                            targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value, property.Path);
+                        }
+                        else if (property.Path.Contains("\\")) //Komplexes Objekt
+                        {
+                            subOjects.Add(property.Path.Split('\\')[0]);
+                        }
+                        else
+                        {
+                            throw new Exception("strange input!!!");
+                        }
+                    }
+                }
+                foreach (var subOject in subOjects)
+                {
+                    targetObject = SetSubObject(properties, targetObject, subOject);
+                }
             }
             return targetObject;
         }
@@ -84,7 +90,7 @@ namespace GenericObjectVisualizer
                 }
                 else
                 {
-                    retVal.Add(new PropertyVisualizerInformations(null, StandardTypeConverter.ConvertToString(content)));
+                    retVal.Add(new PropertyVisualizerInformations(name: null, value: StandardTypeConverter.ConvertToString(content)));
                 }
             }
             return retVal;

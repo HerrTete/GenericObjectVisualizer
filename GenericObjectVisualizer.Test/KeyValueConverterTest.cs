@@ -200,6 +200,23 @@ namespace GenericObjectVisualizer.Test
             Assert.IsTrue(reconvertedTestObject.Klassenbuch.Klassensprecher.Name.EndsWith("TEST"));
             Assert.IsTrue(reconvertedTestObject.Klassenbuch.Klassensprecher.Vorname.EndsWith("TEST"));
         }
+
+        [TestMethod]
+        public void ConvertStringTest()
+        {
+            var inputString = "Das ist ein Test";
+            var newString = "Das war ein Test.";
+            var converter = new KeyValueConverter();
+            var result = converter.ConvertFromObject(inputString);
+            Assert.IsTrue(result.Count == 1);
+            Assert.AreEqual(inputString, result[0].Value);
+            
+            //Änderung machen
+            result[0].Value = newString;
+
+            var reconvertedString = converter.ConvertToObject(result, inputString);
+            Assert.AreEqual(newString, reconvertedString);
+        }
     }
 
     public class EnumTest4

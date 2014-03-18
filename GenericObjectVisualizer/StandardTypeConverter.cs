@@ -18,7 +18,12 @@ namespace GenericObjectVisualizer
 
         private static void AddType(Type type)
         {
-            _supportedTypes.Add(type,type.Name);
+            _supportedTypes.Add(type, type.Name);
+        }
+
+        internal static bool IsStandardType(object inputObject)
+        {
+            return IsStandardType(inputObject.GetType());
         }
 
         internal static bool IsStandardType(Type type)
