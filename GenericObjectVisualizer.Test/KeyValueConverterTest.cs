@@ -199,7 +199,29 @@ namespace GenericObjectVisualizer.Test
         {
             var testObject = new EnumTest5();
             var result = KeyValueConverter.ConvertFromObject(testObject);
-            var reconvertedObject = KeyValueConverter.ConvertToObject(result, testObject);
+
+            //Änderungen machen
+            foreach (var propertyVisualizerInformationse in result)
+            {
+                propertyVisualizerInformationse.Value += "TEST";
+            }
+
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTest5;
+
+            Assert.IsNotNull(reconvertedTestObject);
+            foreach (var klasse in reconvertedTestObject.Klassen)
+            {
+                foreach (var person in klasse.Kinder)
+                {
+                    Assert.IsTrue(person.Name.EndsWith("TEST"));
+                    Assert.IsTrue(person.Vorname.EndsWith("TEST"));
+                }
+
+                Assert.IsTrue(klasse.Klassenlehrer.Name.EndsWith("TEST"));
+                Assert.IsTrue(klasse.Klassenlehrer.Vorname.EndsWith("TEST"));
+            }
+
+            Assert.IsTrue(reconvertedTestObject.Klassenname.EndsWith("TEST"));
         }
 
         [TestMethod]

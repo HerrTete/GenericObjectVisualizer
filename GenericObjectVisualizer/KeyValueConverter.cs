@@ -117,10 +117,25 @@ namespace GenericObjectVisualizer
                 }
                 newSubObjectProperties.Add(new PropertyVisualizerInformations(name, value, path));
             }
-            var propInfo = targetObject.GetType().GetProperty(subOject);
-            var targetSubObject = propInfo.GetValue(targetObject, null);
-            targetSubObject = ConvertToObject(newSubObjectProperties, targetSubObject);
-            propInfo.SetValue(targetObject, targetSubObject, null);
+            if (subOject.EndsWith("]"))
+            {
+                var split = subOject.Split('[', ']', '\\');
+                var index = Convert.ToInt32(split[split.Length - 2]);
+                var propName = split[split.Length - 3];
+                var propInfo = targetObject.GetType().GetProperty(propName);
+                var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
+                var indexer = propInfo.PropertyType.GetProperty("Item");
+                var targetEnumerationItem = targetEnumeration.ElementAt(index);
+                targetEnumerationItem = ConvertToObject(newSubObjectProperties, targetEnumerationItem);
+                indexer.SetValue(targetEnumeration, targetEnumerationItem, new object[] { index });
+            }
+            else
+            {
+                var propInfo = targetObject.GetType().GetProperty(subOject);
+                var targetSubObject = propInfo.GetValue(targetObject, null);
+                targetSubObject = ConvertToObject(newSubObjectProperties, targetSubObject);
+                propInfo.SetValue(targetObject, targetSubObject, null);
+            }
             return targetObject;
         }
 
@@ -181,10 +196,16 @@ namespace GenericObjectVisualizer
                         var enumeration = ConvertFromObject(o);
                         foreach (var propertyVisualizerInformationse in enumeration)
                         {
+                            var path = name;
+                            if (propertyVisualizerInformationse.Path != null)
+                            {
+                                path += "\\" + propertyVisualizerInformationse.Path;
+                            }
                             retVal.Add(
                                 new PropertyVisualizerInformations(
                                     propertyVisualizerInformationse.Name,
-                                    propertyVisualizerInformationse.Value, name + propertyVisualizerInformationse.Path));
+                                    propertyVisualizerInformationse.Value, 
+                                    path));
                         }
                     }
                 }
