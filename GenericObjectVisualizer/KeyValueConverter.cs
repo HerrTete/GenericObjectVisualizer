@@ -184,7 +184,7 @@ namespace GenericObjectVisualizer
                             retVal.Add(
                                 new PropertyVisualizerInformations(
                                     propertyVisualizerInformationse.Name,
-                                    propertyVisualizerInformationse.Value, name));
+                                    propertyVisualizerInformationse.Value, name + propertyVisualizerInformationse.Path));
                         }
                     }
                 }

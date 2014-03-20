@@ -195,6 +195,14 @@ namespace GenericObjectVisualizer.Test
         }
 
         [TestMethod]
+        public void ConvertFromObjectEnumerationTest5()
+        {
+            var testObject = new EnumTest5();
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+            var reconvertedObject = KeyValueConverter.ConvertToObject(result, testObject);
+        }
+
+        [TestMethod]
         public void ConvertStringTest()
         {
             var inputString = "Das ist ein Test";
@@ -209,6 +217,32 @@ namespace GenericObjectVisualizer.Test
             var reconvertedString = KeyValueConverter.ConvertToObject(result, inputString);
             Assert.AreEqual(newString, reconvertedString);
         }
+    }
+
+    public class EnumTest5
+    {
+        public EnumTest5()
+        {
+            Klassen = new List<Klasse>();
+            Klassen.Add(new Klasse());
+            Klassenname = "3g";
+        }
+        public List<Klasse> Klassen { get; set; }
+        public string Klassenname { get; set; }
+    }
+
+    public class Klasse
+    {
+        public Klasse()
+        {
+            Klassenlehrer = new Person { Name = "Peter", Vorname = "Hans" };
+            Kinder = new List<Person>();
+            Kinder.Add(new Person{Name = "Müller", Vorname = "Hans-Jürgen"});
+            Kinder.Add(new Person{Name = "Schultze", Vorname = "Klaus-Dieter"});
+            Kinder.Add(new Person{Name = "Schmidt", Vorname = "Bernd-Hans"});
+        }
+        public List<Person> Kinder { get; set; }
+        public Person Klassenlehrer { get; set; }
     }
 
     public class EnumTest4
