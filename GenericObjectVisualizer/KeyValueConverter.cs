@@ -21,7 +21,7 @@ namespace GenericObjectVisualizer
                         {
                             targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value);
                         }
-                        else if(targetObject.GetType().GetProperty(property.Name).PropertyType.IsEnum)
+                        else if (targetObject.GetType().GetProperty(property.Name).PropertyType.IsEnum)
                         {
                             targetObject = SetValueOnEnum(targetObject, property.Name, property.Value);
                         }
@@ -62,14 +62,6 @@ namespace GenericObjectVisualizer
             return targetObject;
         }
 
-        private static object SetValueOnEnum(object targetObject, string name, string value)
-        {
-            var targetProperty = targetObject.GetType().GetProperty(name);
-            var targetValue = Enum.Parse(targetProperty.PropertyType, value);
-            targetProperty.SetValue(targetObject, targetValue, null);
-            return targetObject;
-        }
-
         public static List<PropertyVisualizerInformations> ConvertFromObject(object content)
         {
             var retVal = new List<PropertyVisualizerInformations>();
@@ -83,7 +75,7 @@ namespace GenericObjectVisualizer
                         {
                             retVal.Add(ConvertStandardType(content, propertyInfo, propertyInfo.Name));
                         }
-                        else if (typeof(IEnumerable).IsAssignableFrom(propertyInfo.PropertyType)) //IEnumerable
+                        else if (typeof(IEnumerable<object>).IsAssignableFrom(propertyInfo.PropertyType)) //IEnumerable
                         {
                             retVal.AddRange(
                                 ConvertEnumeration(
@@ -95,6 +87,15 @@ namespace GenericObjectVisualizer
                             var value = (propertyInfo.GetValue(content, null) as Enum);
                             var valueString = Enum.GetName(propertyInfo.PropertyType, value);
                             retVal.Add(new PropertyVisualizerInformations(propertyInfo.Name, valueString));
+                        }
+                        else if (propertyInfo.PropertyType.IsArray)
+                        {
+                            var value = (propertyInfo.GetValue(content, null) as Array);
+                            var e = value.Cast<object>().ToList();
+                            retVal.AddRange(
+                                ConvertEnumeration(
+                                    e,
+                                    propertyInfo.Name));
                         }
                         else //Komplexe Object
                         {
@@ -116,6 +117,14 @@ namespace GenericObjectVisualizer
                 }
             }
             return retVal;
+        }
+
+        private static object SetValueOnEnum(object targetObject, string name, string value)
+        {
+            var targetProperty = targetObject.GetType().GetProperty(name);
+            var targetValue = Enum.Parse(targetProperty.PropertyType, value);
+            targetProperty.SetValue(targetObject, targetValue, null);
+            return targetObject;
         }
 
         private static object SetSubObject(IEnumerable<PropertyVisualizerInformations> properties, object targetObject, string subOject)
@@ -177,21 +186,46 @@ namespace GenericObjectVisualizer
             var propName = split[split.Length - 3];
             var propInfo = targetObject.GetType().GetProperty(propName);
             var targetEnumeration = propInfo.GetValue(targetObject, null) as IEnumerable<object>;
-            var indexer = propInfo.PropertyType.GetProperty("Item");
-            var targetEnumerationItem = targetEnumeration.ElementAt(index);
 
-            if (StandardTypeConverter.IsStandardType(targetEnumerationItem.GetType())) //In der Enumeration steckt ein Basistyp
+            if (!propInfo.PropertyType.IsArray)
             {
-                var targetValue = StandardTypeConverter.ConvertFromString(propertyValue, targetEnumerationItem.GetType());
-                indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                var indexer = propInfo.PropertyType.GetProperty("Item");
+                var targetEnumerationItem = targetEnumeration.ElementAt(index);
+
+                if (StandardTypeConverter.IsStandardType(targetEnumerationItem.GetType())) //In der Enumeration steckt ein Basistyp
+                {
+                    var targetValue = StandardTypeConverter.ConvertFromString(propertyValue, targetEnumerationItem.GetType());
+                    indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                }
+                else //In der Enumeration steckt kein Basistyp
+                {
+                    var inputProperty = new PropertyVisualizerInformations(propertyName, propertyValue);
+                    var targetValue = ConvertToObject(
+                        new List<PropertyVisualizerInformations> { inputProperty },
+                        targetEnumerationItem);
+                    indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                }
             }
-            else //In der Enumeration steckt kein Basistyp
+            else
             {
-                var inputProperty = new PropertyVisualizerInformations(propertyName, propertyValue);
-                var targetValue = ConvertToObject(
-                    new List<PropertyVisualizerInformations> { inputProperty },
-                    targetEnumerationItem);
-                indexer.SetValue(targetEnumeration, targetValue, new object[] { index });
+                var targetArray = propInfo.GetValue(targetObject, null) as Array;
+
+                var targetItem = targetArray.GetValue(index);//propInfo.GetValue(targetObject, new object[] { index });
+
+
+                if (StandardTypeConverter.IsStandardType(targetItem.GetType())) //In der Enumeration steckt ein Basistyp
+                {
+                    var targetValue = StandardTypeConverter.ConvertFromString(propertyValue, targetItem.GetType());
+                    targetArray.SetValue(targetValue, index);
+                }
+                else //In der Enumeration steckt kein Basistyp
+                {
+                    var inputProperty = new PropertyVisualizerInformations(propertyName, propertyValue);
+                    var targetValue = ConvertToObject(
+                        new List<PropertyVisualizerInformations> { inputProperty },
+                        targetItem);
+                    targetArray.SetValue(targetValue, index);
+                }
             }
             return targetObject;
         }
@@ -222,7 +256,7 @@ namespace GenericObjectVisualizer
                             retVal.Add(
                                 new PropertyVisualizerInformations(
                                     propertyVisualizerInformationse.Name,
-                                    propertyVisualizerInformationse.Value, 
+                                    propertyVisualizerInformationse.Value,
                                     path));
                         }
                     }

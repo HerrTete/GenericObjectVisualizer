@@ -14,6 +14,7 @@ namespace GenericObjectVisualizer
             AddType(typeof(int));
             AddType(typeof(TimeSpan));
             AddType(typeof(DateTime));
+            AddType(typeof(byte));
         }
 
         private static void AddType(Type type)
@@ -62,6 +63,9 @@ namespace GenericObjectVisualizer
             {
                 switch (targetType.Name)
                 {
+                    case "Byte":
+                        targetValue = Convert.ToByte(value);
+                        break;
                     case "DateTime":
                         targetValue = Convert.ToDateTime(value);
                         break;

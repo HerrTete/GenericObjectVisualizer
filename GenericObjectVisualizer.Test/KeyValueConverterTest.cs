@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using GenericObjectVisualizer.TestUI;
 
@@ -232,7 +233,7 @@ namespace GenericObjectVisualizer.Test
             var result = KeyValueConverter.ConvertFromObject(inputString);
             Assert.IsTrue(result.Count == 1);
             Assert.AreEqual(inputString, result[0].Value);
-            
+
             //Änderung machen
             result[0].Value = newString;
 
@@ -246,7 +247,7 @@ namespace GenericObjectVisualizer.Test
             var testObject = new EnumTestObject();
             var result = KeyValueConverter.ConvertFromObject(testObject);
 
-            Assert.IsTrue(result.Count==1);
+            Assert.IsTrue(result.Count == 1);
             Assert.AreEqual("Farbe", result[0].Name);
             Assert.AreEqual("Grün", result[0].Value);
             Assert.IsNull(result[0].Path);
@@ -260,6 +261,78 @@ namespace GenericObjectVisualizer.Test
 
             Assert.AreEqual(Farbe.Gelb, reconvertedTestObject.Farbe);
         }
+
+        [TestMethod]
+        public void ConvertObjectWithByteArray()
+        {
+            var testObject = new ByteArrayTestObject();
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+
+            Assert.IsTrue(result.Count == 5);
+
+            //Änderungen machen
+            foreach (var propertyVisualizerInformationse in result)
+            {
+                var i = Convert.ToInt32(propertyVisualizerInformationse.Value);
+                i++;
+                propertyVisualizerInformationse.Value = i.ToString();
+            }
+
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as ByteArrayTestObject;
+
+            Assert.AreEqual(1, reconvertedTestObject.ByteArray[0]);
+            Assert.AreEqual(2, reconvertedTestObject.ByteArray[1]);
+            Assert.AreEqual(3, reconvertedTestObject.ByteArray[2]);
+            Assert.AreEqual(4, reconvertedTestObject.ByteArray[3]);
+            Assert.AreEqual(5, reconvertedTestObject.ByteArray[4]);
+        }
+
+        [TestMethod]
+        public void ConvertObjectWithObjectArray()
+        {
+            var testObject = new ObjectArrayTestObject();
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+
+            Assert.IsTrue(result.Count == 4);
+
+            //Änderungen machen
+            foreach (var propertyVisualizerInformationse in result)
+            {
+                propertyVisualizerInformationse.Value += "TEST";
+            }
+
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as ObjectArrayTestObject;
+
+            Assert.IsTrue(reconvertedTestObject.PersonArray[0].Name.EndsWith("TEST"));
+            Assert.IsTrue(reconvertedTestObject.PersonArray[0].Vorname.EndsWith("TEST"));
+            Assert.IsTrue(reconvertedTestObject.PersonArray[1].Name.EndsWith("TEST"));
+            Assert.IsTrue(reconvertedTestObject.PersonArray[1].Vorname.EndsWith("TEST"));
+        }
+    }
+
+    public class ObjectArrayTestObject
+    {
+        public ObjectArrayTestObject()
+        {
+            PersonArray = new Person[2];
+            PersonArray[0] = new Person { Name = "Klaus", Vorname = "Dieter" };
+            PersonArray[1] = new Person { Name = "Peter", Vorname = "Hans" };
+        }
+        public Person[] PersonArray { get; set; }
+    }
+
+    public class ByteArrayTestObject
+    {
+        public ByteArrayTestObject()
+        {
+            ByteArray = new byte[5];
+            ByteArray[0] = 0;
+            ByteArray[1] = 1;
+            ByteArray[2] = 2;
+            ByteArray[3] = 3;
+            ByteArray[4] = 4;
+        }
+        public byte[] ByteArray { get; set; }
     }
 
     public class EnumTestObject
@@ -297,9 +370,9 @@ namespace GenericObjectVisualizer.Test
         {
             Klassenlehrer = new Person { Name = "Peter", Vorname = "Hans" };
             Kinder = new List<Person>();
-            Kinder.Add(new Person{Name = "Müller", Vorname = "Hans-Jürgen"});
-            Kinder.Add(new Person{Name = "Schultze", Vorname = "Klaus-Dieter"});
-            Kinder.Add(new Person{Name = "Schmidt", Vorname = "Bernd-Hans"});
+            Kinder.Add(new Person { Name = "Müller", Vorname = "Hans-Jürgen" });
+            Kinder.Add(new Person { Name = "Schultze", Vorname = "Klaus-Dieter" });
+            Kinder.Add(new Person { Name = "Schmidt", Vorname = "Bernd-Hans" });
         }
         public List<Person> Kinder { get; set; }
         public Person Klassenlehrer { get; set; }
@@ -383,10 +456,10 @@ namespace GenericObjectVisualizer.Test
         public Gruppe()
         {
             Personen = new List<Person>();
-            Personen.Add(new Person{Name = "Müller", Vorname = "Lieschen"});
-            Personen.Add(new Person{Name = "Peter", Vorname = "Hans"});
+            Personen.Add(new Person { Name = "Müller", Vorname = "Lieschen" });
+            Personen.Add(new Person { Name = "Peter", Vorname = "Hans" });
         }
 
-        public List<Person> Personen { get; set; } 
+        public List<Person> Personen { get; set; }
     }
 }
