@@ -21,6 +21,10 @@ namespace GenericObjectVisualizer
                         {
                             targetObject = SetValueOnEnumeration(targetObject, property.Name, property.Value);
                         }
+                        else if(targetObject.GetType().GetProperty(property.Name).PropertyType.IsEnum)
+                        {
+                            targetObject = SetValueOnEnum(targetObject, property.Name, property.Value);
+                        }
                         else
                         {
                             targetObject = SetValueOnStandardTypeProperty(targetObject, property.Name, property.Value);
@@ -58,6 +62,14 @@ namespace GenericObjectVisualizer
             return targetObject;
         }
 
+        private static object SetValueOnEnum(object targetObject, string name, string value)
+        {
+            var targetProperty = targetObject.GetType().GetProperty(name);
+            var targetValue = Enum.Parse(targetProperty.PropertyType, value);
+            targetProperty.SetValue(targetObject, targetValue, null);
+            return targetObject;
+        }
+
         public static List<PropertyVisualizerInformations> ConvertFromObject(object content)
         {
             var retVal = new List<PropertyVisualizerInformations>();
@@ -77,6 +89,12 @@ namespace GenericObjectVisualizer
                                 ConvertEnumeration(
                                     propertyInfo.GetValue(content, null) as IEnumerable<object>,
                                     propertyInfo.Name));
+                        }
+                        else if (propertyInfo.PropertyType.IsEnum)
+                        {
+                            var value = (propertyInfo.GetValue(content, null) as Enum);
+                            var valueString = Enum.GetName(propertyInfo.PropertyType, value);
+                            retVal.Add(new PropertyVisualizerInformations(propertyInfo.Name, valueString));
                         }
                         else //Komplexe Object
                         {

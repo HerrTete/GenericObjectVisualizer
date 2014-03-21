@@ -239,6 +239,44 @@ namespace GenericObjectVisualizer.Test
             var reconvertedString = KeyValueConverter.ConvertToObject(result, inputString);
             Assert.AreEqual(newString, reconvertedString);
         }
+
+        [TestMethod]
+        public void ConvertObjectWithEnumTest()
+        {
+            var testObject = new EnumTestObject();
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+
+            Assert.IsTrue(result.Count==1);
+            Assert.AreEqual("Farbe", result[0].Name);
+            Assert.AreEqual("Grün", result[0].Value);
+            Assert.IsNull(result[0].Path);
+
+            //Änderungen machen
+            result[0].Value = "Gelb";
+
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as EnumTestObject;
+
+            Assert.IsNotNull(reconvertedTestObject);
+
+            Assert.AreEqual(Farbe.Gelb, reconvertedTestObject.Farbe);
+        }
+    }
+
+    public class EnumTestObject
+    {
+        public EnumTestObject()
+        {
+            Farbe = Farbe.Grün;
+        }
+        public Farbe Farbe { get; set; }
+    }
+
+    public enum Farbe
+    {
+        Weiß,
+        Schwarz,
+        Grün,
+        Gelb
     }
 
     public class EnumTest5
