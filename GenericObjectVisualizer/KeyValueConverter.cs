@@ -238,26 +238,29 @@ namespace GenericObjectVisualizer
                 int i = 0;
                 foreach (var o in enumerable)
                 {
-                    var name = propertyName + "[" + i++ + "]";
-                    if (StandardTypeConverter.IsStandardType(o.GetType()))//Standardtype
+                    if (o != null)
                     {
-                        retVal.Add(new PropertyVisualizerInformations(name, StandardTypeConverter.ConvertToString(o)));
-                    }
-                    else//Komplexes Objekt
-                    {
-                        var enumeration = ConvertFromObject(o);
-                        foreach (var propertyVisualizerInformationse in enumeration)
+                        var name = propertyName + "[" + i++ + "]";
+                        if (StandardTypeConverter.IsStandardType(o.GetType()))//Standardtype
                         {
-                            var path = name;
-                            if (propertyVisualizerInformationse.Path != null)
+                            retVal.Add(new PropertyVisualizerInformations(name, StandardTypeConverter.ConvertToString(o)));
+                        }
+                        else//Komplexes Objekt
+                        {
+                            var enumeration = ConvertFromObject(o);
+                            foreach (var propertyVisualizerInformationse in enumeration)
                             {
-                                path += "\\" + propertyVisualizerInformationse.Path;
+                                var path = name;
+                                if (propertyVisualizerInformationse.Path != null)
+                                {
+                                    path += "\\" + propertyVisualizerInformationse.Path;
+                                }
+                                retVal.Add(
+                                    new PropertyVisualizerInformations(
+                                        propertyVisualizerInformationse.Name,
+                                        propertyVisualizerInformationse.Value,
+                                        path));
                             }
-                            retVal.Add(
-                                new PropertyVisualizerInformations(
-                                    propertyVisualizerInformationse.Name,
-                                    propertyVisualizerInformationse.Value,
-                                    path));
                         }
                     }
                 }

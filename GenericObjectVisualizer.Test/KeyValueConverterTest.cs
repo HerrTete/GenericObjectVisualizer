@@ -308,6 +308,29 @@ namespace GenericObjectVisualizer.Test
             Assert.IsTrue(reconvertedTestObject.PersonArray[1].Name.EndsWith("TEST"));
             Assert.IsTrue(reconvertedTestObject.PersonArray[1].Vorname.EndsWith("TEST"));
         }
+
+        [TestMethod]
+        public void NullPropertiesInArrayTest()
+        {
+            var testObject = new ObjectArrayTestObject();
+            testObject.PersonArray[1] = null;
+
+            var result = KeyValueConverter.ConvertFromObject(testObject);
+
+            Assert.IsTrue(result.Count == 2);
+
+            //Änderungen machen
+            foreach (var propertyVisualizerInformationse in result)
+            {
+                propertyVisualizerInformationse.Value += "TEST";
+            }
+
+            var reconvertedTestObject = KeyValueConverter.ConvertToObject(result, testObject) as ObjectArrayTestObject;
+
+            Assert.IsTrue(reconvertedTestObject.PersonArray[0].Name.EndsWith("TEST"));
+            Assert.IsTrue(reconvertedTestObject.PersonArray[0].Vorname.EndsWith("TEST"));
+            Assert.IsNull(reconvertedTestObject.PersonArray[1]);
+        }
     }
 
     public class ObjectArrayTestObject
