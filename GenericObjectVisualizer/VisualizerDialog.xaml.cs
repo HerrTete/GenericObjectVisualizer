@@ -1,34 +1,31 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-using GenericObjectVisualizer.TestUI.Annotations;
-
-namespace GenericObjectVisualizer.TestUI
+namespace GenericObjectVisualizer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class VisualizerDialog : Window, INotifyPropertyChanged
     {
-        private TestObject1 testObject;
+        private object _viewModel;
 
-        public MainWindow()
+        public VisualizerDialog()
         {
             InitializeComponent();
             DataContext = this;
-            TestObject = new TestObject1();
         }
 
-        public TestObject1 TestObject
+        public object ViewModel
         {
             get
             {
-                return testObject;
+                return _viewModel;
             }
             set
             {
-                testObject = value;
-                OnPropertyChanged("TestObject");
+                _viewModel = value;
+                OnPropertyChanged("ViewModel");
             }
         }
 

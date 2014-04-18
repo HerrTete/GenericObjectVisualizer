@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericObjectVisualizer", "GenericObjectVisualizer\GenericObjectVisualizer.csproj", "{24E15CF0-C684-471F-99FB-B665F5548508}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericObjectVisualizer.TestUI", "GenericObjectVisualizer.TestUI\GenericObjectVisualizer.TestUI.csproj", "{153DF5D6-52AC-4064-914B-2D775663ACB0}"
@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericObjectVisualizer.Client.Console", "GenericObjectVisualizer.Client.Console\GenericObjectVisualizer.Client.Console.csproj", "{65FBABE5-8697-425B-88E0-CEC59CA5B263}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5BDFE913-DA5E-42F7-A7CE-FA82EEAE960D}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -57,8 +61,23 @@ Global
 		{CBD67EC8-9FE5-4C1D-8CDB-56668A5B420F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CBD67EC8-9FE5-4C1D-8CDB-56668A5B420F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CBD67EC8-9FE5-4C1D-8CDB-56668A5B420F}.Release|x86.ActiveCfg = Release|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65FBABE5-8697-425B-88E0-CEC59CA5B263} = {5BDFE913-DA5E-42F7-A7CE-FA82EEAE960D}
+		{CBD67EC8-9FE5-4C1D-8CDB-56668A5B420F} = {5BDFE913-DA5E-42F7-A7CE-FA82EEAE960D}
+		{153DF5D6-52AC-4064-914B-2D775663ACB0} = {5BDFE913-DA5E-42F7-A7CE-FA82EEAE960D}
 	EndGlobalSection
 EndGlobal

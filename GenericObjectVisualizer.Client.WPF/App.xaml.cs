@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
-namespace GenericObjectVisualizer.TestUI
+namespace GenericObjectVisualizer.Client.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -15,7 +16,7 @@ namespace GenericObjectVisualizer.TestUI
         protected override void OnStartup(StartupEventArgs e)
         {
             var dlg = new VisualizerDialog();
-            dlg.ViewModel = new TestObject1();
+            dlg.ViewModel = new TestObject();
             dlg.ShowDialog();
         }
     }
