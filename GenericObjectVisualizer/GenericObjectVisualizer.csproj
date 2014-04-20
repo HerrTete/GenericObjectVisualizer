@@ -57,13 +57,14 @@
     <Compile Include="IConverter.cs" />
     <Compile Include="JsonConverter.cs" />
     <Compile Include="KeyValueConverter.cs" />
-    <Compile Include="VisualizerDialog.xaml.cs">
-      <DependentUpon>VisualizerDialog.xaml</DependentUpon>
+    <Compile Include="VisualizerWindow.xaml.cs">
+      <DependentUpon>VisualizerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PropertyVisualizerInformations.cs" />
     <Compile Include="StandardTypeConverter.cs" />
+    <Compile Include="VisualizerWindowStyle.cs" />
     <Compile Include="XmlConverter.cs" />
-    <Page Include="VisualizerDialog.xaml">
+    <Page Include="VisualizerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

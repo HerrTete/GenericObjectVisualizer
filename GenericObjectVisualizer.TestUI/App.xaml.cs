@@ -14,7 +14,7 @@ namespace GenericObjectVisualizer.TestUI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var dlg = new VisualizerDialog();
+            var dlg = new VisualizerWindow();
             dlg.ViewModel = new TestObject1();
             dlg.ShowDialog();
         }
