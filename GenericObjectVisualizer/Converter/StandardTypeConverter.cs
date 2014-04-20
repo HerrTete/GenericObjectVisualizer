@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GenericObjectVisualizer
+namespace GenericObjectVisualizer.Converter
 {
     internal static class StandardTypeConverter
     {

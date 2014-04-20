@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GenericObjectVisualizer.TestUI;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GenericObjectVisualizer.Converter;
 
 namespace GenericObjectVisualizer.Test
 {

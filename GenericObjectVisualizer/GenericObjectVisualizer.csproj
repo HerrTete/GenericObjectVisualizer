@@ -53,18 +53,18 @@
   <ItemGroup>
     <Compile Include="Annotations.cs" />
     <Compile Include="DisplayFormat.cs" />
-    <Compile Include="GovKeyValue.cs" />
+    <Compile Include="UiCodeBehind\GovKeyValue.cs" />
     <Compile Include="IConverter.cs" />
-    <Compile Include="JsonConverter.cs" />
-    <Compile Include="KeyValueConverter.cs" />
-    <Compile Include="VisualizerWindow.xaml.cs">
+    <Compile Include="Converter\JsonConverter.cs" />
+    <Compile Include="Converter\KeyValueConverter.cs" />
+    <Compile Include="UiWrapper\VisualizerWindow.xaml.cs">
       <DependentUpon>VisualizerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PropertyVisualizerInformations.cs" />
-    <Compile Include="StandardTypeConverter.cs" />
-    <Compile Include="VisualizerWindowStyle.cs" />
-    <Compile Include="XmlConverter.cs" />
-    <Page Include="VisualizerWindow.xaml">
+    <Compile Include="Converter\StandardTypeConverter.cs" />
+    <Compile Include="UiWrapper\VisualizerWindowStyle.cs" />
+    <Compile Include="Converter\XmlConverter.cs" />
+    <Page Include="UiWrapper\VisualizerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -72,7 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="GovText.cs">
+    <Compile Include="UiCodeBehind\GovText.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Script.Serialization;
 
-namespace GenericObjectVisualizer
+namespace GenericObjectVisualizer.Converter
 {
     internal class JsonConverter : IConverter
     {

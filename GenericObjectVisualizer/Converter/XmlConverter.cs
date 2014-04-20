@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace GenericObjectVisualizer
+namespace GenericObjectVisualizer.Converter
 {
     public class XmlConverter : IConverter
     {
