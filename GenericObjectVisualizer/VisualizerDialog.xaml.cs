@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 
 namespace GenericObjectVisualizer
@@ -39,6 +40,22 @@ namespace GenericObjectVisualizer
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        public static Action VisualizeObject(object objectForVisualizing, bool modal = false)
+        {
+            var visualizerWindow = new VisualizerDialog();
+            visualizerWindow.ViewModel = objectForVisualizing;
+            if (modal)
+            {
+                visualizerWindow.ShowDialog();
+
+            }
+            else
+            {
+                visualizerWindow.Show();
+            }
+            return visualizerWindow.Close;
         }
     }
 }
