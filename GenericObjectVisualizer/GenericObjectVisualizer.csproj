@@ -38,13 +38,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -64,8 +60,9 @@
     </Compile>
     <Compile Include="PropertyVisualizerInformations.cs" />
     <Compile Include="Converter\StandardTypeConverter.cs" />
-    <Compile Include="UiWrapper\VisualizerWindowStyle.cs" />
+    <Compile Include="UiWrapper\VisualizerDisplayStyle.cs" />
     <Compile Include="Converter\XmlConverter.cs" />
+    <Compile Include="UiWrapper\VisualizerWindowStyle.cs" />
     <Page Include="UiWrapper\VisualizerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

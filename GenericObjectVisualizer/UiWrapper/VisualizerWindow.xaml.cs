@@ -2,33 +2,35 @@
 using System.ComponentModel;
 using System.Windows;
 
+using GenericObjectVisualizer.UiWrapper;
+
 namespace GenericObjectVisualizer
 {
     public partial class VisualizerWindow : Window, INotifyPropertyChanged
     {
         private object _viewModel;
-        private VisualizerWindowStyle _visualizerWindowStyle;
+        private VisualizerDisplayStyle _visualizerDisplayStyle;
 
-        public VisualizerWindow(VisualizerWindowStyle visualizerWindowStyle)
+        public VisualizerWindow(VisualizerDisplayStyle visualizerDisplayStyle)
         {
             InitializeComponent();
             DataContext = this;
             GovJson.Visibility = Visibility.Collapsed;
             GovXml.Visibility = Visibility.Collapsed;
             GovKeyValue.Visibility = Visibility.Collapsed;
-            _visualizerWindowStyle = visualizerWindowStyle;
-            switch (_visualizerWindowStyle)
+            _visualizerDisplayStyle = visualizerDisplayStyle;
+            switch (_visualizerDisplayStyle)
             {
-                case VisualizerWindowStyle.XML:
+                case VisualizerDisplayStyle.XML:
                     GovXml.Visibility = Visibility.Visible;
                     break;
-                case VisualizerWindowStyle.Json:
+                case VisualizerDisplayStyle.Json:
                     GovJson.Visibility = Visibility.Visible;
                     break;
-                case VisualizerWindowStyle.KeyValue:
+                case VisualizerDisplayStyle.KeyValue:
                     GovKeyValue.Visibility = Visibility.Visible;
                     break;
-                case VisualizerWindowStyle.Undefined:
+                case VisualizerDisplayStyle.Undefined:
                     GovXml.Visibility = Visibility.Visible;
                     GovJson.Visibility = Visibility.Visible;
                     GovKeyValue.Visibility = Visibility.Visible;
@@ -67,11 +69,12 @@ namespace GenericObjectVisualizer
             }
         }
 
-        public static Action VisualizeObject(object objectForVisualizing, VisualizerWindowStyle visualizerWindowStyle, bool modal = false)
+        public static Action VisualizeObject(object objectForVisualizing, VisualizerDisplayStyle visualizerDisplayStyle, VisualizerWindowStyle windowStyle = VisualizerWindowStyle.NonModal)
         {
-            var visualizerWindow = new VisualizerWindow(visualizerWindowStyle);
+            var visualizerWindow = new VisualizerWindow(visualizerDisplayStyle);
             visualizerWindow.ViewModel = objectForVisualizing;
-            if (modal)
+
+            if (windowStyle == VisualizerWindowStyle.Modal)
             {
                 visualizerWindow.ShowDialog();
 

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using GenericObjectVisualizer.UiWrapper;
+
 namespace GenericObjectVisualizer.Client.Console
 {
     class Program
@@ -7,7 +9,7 @@ namespace GenericObjectVisualizer.Client.Console
         [STAThread]
         static void Main(string[] args)
         {
-            GenericObjectVisualizer.VisualizerWindow.VisualizeObject(new TestObject(), VisualizerWindowStyle.KeyValue, true);
+            GenericObjectVisualizer.VisualizerWindow.VisualizeObject(new TestObject(), VisualizerDisplayStyle.KeyValue, VisualizerWindowStyle.Modal);
         }
     }
 }
