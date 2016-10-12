@@ -1,5 +1,4 @@
 ﻿using System;
-
 using GenericObjectVisualizer.UiWrapper;
 
 namespace GenericObjectVisualizer.Client.Console

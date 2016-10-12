@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GenericObjectVisualizer.TestUI
+namespace GenericObjectVisualizer.Demo
 {
     public class TestObject3
     {

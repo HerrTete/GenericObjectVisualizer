@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-
 using GenericObjectVisualizer.UiWrapper;
 
-namespace GenericObjectVisualizer
+namespace GenericObjectVisualizer.Demo
 {
     public partial class VisualizerWindow : Window, INotifyPropertyChanged
     {

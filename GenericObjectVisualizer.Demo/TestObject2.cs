@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GenericObjectVisualizer.TestUI
+namespace GenericObjectVisualizer.Demo
 {
     public class TestObject2
     {

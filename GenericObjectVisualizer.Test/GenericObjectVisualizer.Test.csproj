@@ -51,9 +51,9 @@
     <Compile Include="KeyValueConverterTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenericObjectVisualizer.TestUI\GenericObjectVisualizer.TestUI.csproj">
-      <Project>{153DF5D6-52AC-4064-914B-2D775663ACB0}</Project>
-      <Name>GenericObjectVisualizer.TestUI</Name>
+    <ProjectReference Include="..\GenericObjectVisualizer.Demo\GenericObjectVisualizer.Demo.csproj">
+      <Project>{B6DF3EC1-5856-40CC-A3E3-BD34301B9285}</Project>
+      <Name>GenericObjectVisualizer.Demo</Name>
     </ProjectReference>
     <ProjectReference Include="..\GenericObjectVisualizer\GenericObjectVisualizer.csproj">
       <Project>{24E15CF0-C684-471F-99FB-B665F5548508}</Project>

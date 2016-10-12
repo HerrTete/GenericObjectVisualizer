@@ -55,18 +55,10 @@
     <Compile Include="IConverter.cs" />
     <Compile Include="Converter\JsonConverter.cs" />
     <Compile Include="Converter\KeyValueConverter.cs" />
-    <Compile Include="UiWrapper\VisualizerWindow.xaml.cs">
-      <DependentUpon>VisualizerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PropertyVisualizerInformations.cs" />
     <Compile Include="Converter\StandardTypeConverter.cs" />
     <Compile Include="UiWrapper\VisualizerDisplayStyle.cs" />
     <Compile Include="Converter\XmlConverter.cs" />
-    <Compile Include="UiWrapper\VisualizerWindowStyle.cs" />
-    <Page Include="UiWrapper\VisualizerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

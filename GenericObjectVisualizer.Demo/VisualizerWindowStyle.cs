@@ -1,4 +1,4 @@
-﻿namespace GenericObjectVisualizer.UiWrapper
+﻿namespace GenericObjectVisualizer.Demo
 {
     public enum VisualizerWindowStyle
     {

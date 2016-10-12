@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using GenericObjectVisualizer.TestUI;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenericObjectVisualizer.Converter;
+using GenericObjectVisualizer.Demo;
 
 namespace GenericObjectVisualizer.Test
 {
